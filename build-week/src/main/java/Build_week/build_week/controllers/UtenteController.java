@@ -29,7 +29,7 @@ public class UtenteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // 201
-    public UtenteRespDTO saveDipendente(@RequestBody @Validated UtenteDTO body, BindingResult validationResult) {
+    public UtenteRespDTO save(@RequestBody @Validated UtenteDTO body, BindingResult validationResult) {
 
 
         if (validationResult.hasErrors()) {
@@ -82,4 +82,16 @@ public class UtenteController {
     public void getByIdAndDelete(@PathVariable UUID utenteId) {
         this.utenteService.findByIdAndDelete(utenteId);
     }
+
+    @PutMapping("/{id}/promuovi")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public Utente promuovi(@PathVariable UUID id) {
+        return utenteService.promuoviAdAdmin(id);
+    }
+
+//    @PutMapping("/{id}/ruoli/{ruolo}")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public Utente aggiungiRuolo(@PathVariable UUID id, @PathVariable String ruolo) {
+//        return utenteService.aggiungiRuolo(id, ruolo);
+//    }
 }

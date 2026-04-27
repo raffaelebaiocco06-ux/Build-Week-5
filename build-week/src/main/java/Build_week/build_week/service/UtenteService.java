@@ -157,4 +157,28 @@ public class UtenteService {
             throw new RuntimeException("Errore durante upload avatar", e);
         }
     }
+
+    public Utente promuoviAdAdmin(UUID utenteId) {
+
+        Utente utente = this.findById(utenteId);
+
+        if (!utente.getRuoli().contains("ROLE_ADMIN")) {
+            utente.setRuoli(utente.getRuoli() + ",ROLE_ADMIN");
+        }
+
+        return this.utenteRepository.save(utente);
+    }
+
+//    public Utente aggiungiRuolo(UUID utenteId, String nuovoRuolo) {
+//
+//        Utente utente = this.findById(utenteId);
+//
+//        String ruoloFormattato = "ROLE_" + nuovoRuolo.toUpperCase();
+//
+//        if (!utente.getRuoli().contains(ruoloFormattato)) {
+//            utente.getRuoli().add(ruoloFormattato);
+//        }
+//
+//        return this.utenteRepository.save(utente);
+//    }
 }
