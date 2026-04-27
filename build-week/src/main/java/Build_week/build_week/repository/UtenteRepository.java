@@ -1,4 +1,4 @@
-package Build_week.build_week.repositories;
+package Build_week.build_week.repository;
 
 import Build_week.build_week.entities.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
