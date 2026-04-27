@@ -23,7 +23,7 @@ public class Cliente {
     private String ragioneSociale;
     @Column(nullable = false)
     private String pIva;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)// da mettere in relazione con utenti
     private String email;
     @Column(nullable = false)
     private LocalDate dataInserimento;
@@ -48,8 +48,8 @@ public class Cliente {
     @Column(nullable = false)
     private TipoAzienda tipoAzienda;
 
-//qui ci va indirizzo sede legale
-// qui ci va indirizzo sede operativa
+// TODO qui ci va indirizzo sede legale
+// TODO qui ci va indirizzo sede operativa
 
     public Cliente(String ragioneSociale, String pIva, String email, LocalDate dataInserimento, LocalDate dataUltimoContatto, long fatturatoTot, String pec, String telefono, String emailContatto, String nomeContatto, String cognomeContatto, String telefonoContatto, String logoAziendale, TipoAzienda tipoAzienda) {
         this.ragioneSociale = ragioneSociale;
