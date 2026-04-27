@@ -47,7 +47,7 @@ public class UtenteService {
         String username = body.username().toLowerCase().trim();
         String email = body.email().toLowerCase().trim();
 
-        Utente newUtente = new Utente(body.username(), body.email(), this.bcrypt.encode(body.password()), body.nome(), body.cognome());
+        Utente newUtente = new Utente(username, email, this.bcrypt.encode(body.password()), body.nome(), body.cognome());
         Utente savedUtente = this.utenteRepository.save(newUtente);
 
         log.info("L'utente con id " + savedUtente.getId() + " è stato salvato correttamente");
