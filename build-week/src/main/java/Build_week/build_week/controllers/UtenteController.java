@@ -43,7 +43,6 @@ public class UtenteController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public Page<Utente> getUtenti(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size,
                                   @RequestParam(defaultValue = "username") String sortBy) {
@@ -72,12 +71,14 @@ public class UtenteController {
     }
 
     @PutMapping("/{utenteId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Utente getByIdAndUpdate(@PathVariable UUID utenteId, @RequestBody UtenteDTO body) {
         return this.utenteService.findByIdAndUpdate(utenteId, body);
     }
 
     @DeleteMapping("/{utenteId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // 204
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void getByIdAndDelete(@PathVariable UUID utenteId) {
         this.utenteService.findByIdAndDelete(utenteId);
     }
