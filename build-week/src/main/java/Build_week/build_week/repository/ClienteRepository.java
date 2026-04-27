@@ -14,6 +14,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     List<Cliente> findAllByOrderByFatturatoTotAsc();
     List<Cliente> findAllByOrderByDataInserimentoAsc();
     List<Cliente> findAllByOrderByDataUltimoContattoAsc();
+
     //  TODO provincia della sede legale
     //  List<Cliente>findAllByOrderBy ();
 
