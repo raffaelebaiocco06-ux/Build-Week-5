@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
 
+    boolean existsByEmail(String email);
     // ordina
     List<Cliente> findAllByOrderByNomeContattoAsc();
     List<Cliente> findAllByOrderByFatturatoTotAsc();
@@ -23,4 +24,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     List<Cliente> findByDataInserimento(LocalDate data);
     List<Cliente> findByDataUltimoContatto(LocalDate data);
     List<Cliente> findByNomeContattoContainingIgnoreCase(String parteDelNome);
+
 }
