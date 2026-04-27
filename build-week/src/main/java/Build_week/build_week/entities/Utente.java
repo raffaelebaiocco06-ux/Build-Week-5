@@ -57,7 +57,7 @@ public class Utente implements UserDetails {
         this.nome = nome;
         this.cognome = cognome;
         this.avatar = "https://ui-avatars.com/api/?name=" + nome + "+" + cognome;
-        this.ruoli = "USER";
+        this.ruoli = "ROLE_USER";
     }
 
     @Override

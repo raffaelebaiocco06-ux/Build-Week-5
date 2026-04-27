@@ -2,6 +2,7 @@ package Build_week.build_week.payload;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UtenteDTO(
@@ -24,6 +25,13 @@ public record UtenteDTO(
 
         @NotBlank(message = "Cognome obbligatorio")
         @Size(min = 2, max = 50, message = "Cognome tra 2 e 50 caratteri")
-        String cognome
+        String cognome,
+
+        @Size(max = 255, message = "URL avatar troppo lungo")
+        @Pattern(
+                regexp = "^(http|https)://.*$",
+                message = "L'avatar deve essere un URL valido"
+        )
+        String avatar
 ) {
 }
