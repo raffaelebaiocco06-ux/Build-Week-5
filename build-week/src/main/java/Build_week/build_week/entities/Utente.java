@@ -50,7 +50,7 @@ public class Utente implements UserDetails {
     @Column(nullable = false)
     private String ruoli;
 
-    public Utente(String username, String email, String password, String nome, String cognome, String ruolo) {
+    public Utente(String username, String email, String password, String nome, String cognome) {
         this.username = username;
         this.email = email;
         this.password = password;
