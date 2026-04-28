@@ -6,6 +6,7 @@ import Build_week.build_week.payload.IndirizzoDTO;
 import Build_week.build_week.service.IndirizzoService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,23 @@ public class IndirizzoController {
     @GetMapping("/{indirizzoId}")
     public Indirizzo findById(@PathVariable UUID indirizzoId) {
         return this.indirizzoService.findIndirizzoById(indirizzoId);
+    }
+
+    @DeleteMapping("/{indirizzoId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void findByIdAndDelete(@PathVariable UUID indirizzoId) {
+        this.indirizzoService.findIndirizzoByIdAndDelete(indirizzoId);
+    }
+
+    @PutMapping("/{indirizzoId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public Indirizzo findEventByIdAndUpdate(@PathVariable UUID indirizzoId, @RequestBody @Validated IndirizzoDTO body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            List<String> errors = validation.getFieldErrors().stream().map(error -> error.getDefaultMessage()).toList();
+            throw new ValidationException(errors);
+        }
+        return this.indirizzoService.findIndirizzoByIdAndUpdate(indirizzoId, body);
     }
 
 }
