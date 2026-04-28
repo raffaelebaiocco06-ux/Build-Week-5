@@ -6,7 +6,6 @@ import Build_week.build_week.payload.IndirizzoDTO;
 import Build_week.build_week.service.IndirizzoService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class IndirizzoController {
     @GetMapping
     public Page<Indirizzo> findAll(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size,
-                                   @RequestParam(defaultValue = "eventDate") String sortBy) {
+                                   @RequestParam(defaultValue = "via") String sortBy) {
         return this.indirizzoService.findAll(page, size, sortBy);
     }
 
@@ -46,14 +45,14 @@ public class IndirizzoController {
     }
 
     @DeleteMapping("/{indirizzoId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID indirizzoId) {
         this.indirizzoService.findIndirizzoByIdAndDelete(indirizzoId);
     }
 
     @PutMapping("/{indirizzoId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public Indirizzo findEventByIdAndUpdate(@PathVariable UUID indirizzoId, @RequestBody @Validated IndirizzoDTO body, BindingResult validation) {
         if (validation.hasErrors()) {
             List<String> errors = validation.getFieldErrors().stream().map(error -> error.getDefaultMessage()).toList();
