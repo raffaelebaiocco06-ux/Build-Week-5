@@ -32,7 +32,7 @@ public class ClienteController {
     public Cliente findById(@PathVariable UUID id) {
         return clienteService.findById(id);
     }
-    
+
     @GetMapping("/ordina/nome")
     public List<Cliente> ordinaPerNome() {
         return clienteService.ordinaPerNome();
