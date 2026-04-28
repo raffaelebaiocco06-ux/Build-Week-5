@@ -1,5 +1,6 @@
 package Build_week.build_week.service;
 
+import Build_week.build_week.entities.RuoloUtente;
 import Build_week.build_week.entities.Utente;
 import Build_week.build_week.exceptions.BadRequestException;
 import Build_week.build_week.exceptions.NotFoundException;
@@ -162,9 +163,9 @@ public class UtenteService {
 
         Utente utente = this.findById(utenteId);
 
-//        if (!utente.getRuolo().contains("ROLE_ADMIN")) {
-//            utente.setRuolo(utente.getRuolo() + ",ROLE_ADMIN");
-//        }
+        if (!utente.getRuoli().contains("ROLE_ADMIN")) {
+            utente.setRuoli(utente.getRuoli() + ",ROLE_ADMIN");
+        }
 
         return this.utenteRepository.save(utente);
     }
