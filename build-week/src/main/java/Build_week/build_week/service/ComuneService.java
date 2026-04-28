@@ -56,6 +56,11 @@ public class ComuneService {
                 String provincia = riga[3].toLowerCase().trim();
 
                 Provincia provincia1 = provinciaMap.get(provincia);
+
+                if (provincia1 == null) {
+                    continue;
+                }
+
                 Comune comune1 = new Comune(comune, provincia1);
 
                 comuni.add(comune1);
