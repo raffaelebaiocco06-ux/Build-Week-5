@@ -2,6 +2,7 @@ package Build_week.build_week.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "ruolo")
 @JsonIgnoreProperties({"accountNonExpired", "accountNonLocked", "authorities", "credentialsNonExpired", "enabled"})
 
 public class Utente implements UserDetails {
@@ -48,6 +49,7 @@ public class Utente implements UserDetails {
     private String avatar;
 
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<RuoloUtente> ruolo = new HashSet<>();
 
     public Utente(String username, String email, String password, String nome, String cognome) {
@@ -65,5 +67,5 @@ public class Utente implements UserDetails {
                 .map(r -> new SimpleGrantedAuthority(r.getRuolo()))
                 .toList();
     }
-    
+
 }

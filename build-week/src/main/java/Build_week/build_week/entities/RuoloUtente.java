@@ -1,5 +1,6 @@
 package Build_week.build_week.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class RuoloUtente {
 
     @ManyToOne
     @JoinColumn(name = "utente_id")
+    @JsonBackReference
     private Utente utente;
 
     public RuoloUtente(String ruolo) {
