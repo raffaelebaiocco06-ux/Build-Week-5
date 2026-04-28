@@ -9,8 +9,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "utenti")
@@ -46,8 +47,8 @@ public class Utente implements UserDetails {
     @Column
     private String avatar;
 
-    @Column(nullable = false)
-    private String ruoli;
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<RuoloUtente> ruolo = new HashSet<>();
 
     public Utente(String username, String email, String password, String nome, String cognome) {
         this.username = username;
@@ -55,15 +56,12 @@ public class Utente implements UserDetails {
         this.password = password;
         this.nome = nome;
         this.cognome = cognome;
-        this.avatar = "https://ui-avatars.com/api/?name=" + nome + "+" + cognome;
-        this.ruoli = "ROLE_USER";
     }
 
     @Override
-    public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {
-        return Stream.of(ruoli.split(","))
-                .map(String::trim)
-                .map(SimpleGrantedAuthority::new)
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return ruolo.stream()
+                .map(r -> new SimpleGrantedAuthority(r.getRuolo()))
                 .toList();
     }
 }
