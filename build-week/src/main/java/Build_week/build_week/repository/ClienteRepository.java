@@ -17,7 +17,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     List<Cliente> findAllByOrderByDataUltimoContattoAsc();
 
     //  TODO provincia della sede legale
-    //  List<Cliente>findAllByOrderBy ();
+      List<Cliente> findAllByOrderByIndirizzoSedeLegale_Comune_ProvinciaAsc();
 
     // filtra
     List<Cliente> findByFatturatoTotBetween(Double minimo, Double massimo);
