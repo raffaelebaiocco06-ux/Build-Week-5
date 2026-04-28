@@ -6,6 +6,7 @@ import Build_week.build_week.exceptions.BadRequestException;
 import Build_week.build_week.exceptions.NotFoundException;
 import Build_week.build_week.payload.UtenteDTO;
 import Build_week.build_week.repository.UtenteRepository;
+import Build_week.build_week.tools.EmailSender;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +26,16 @@ import java.util.UUID;
 @Slf4j
 public class UtenteService {
 
+    public final EmailSender emailSender;
     private final UtenteRepository utenteRepository;
     private final Cloudinary cloudinaryUploader;
     private final PasswordEncoder bcrypt;
 
-    public UtenteService(UtenteRepository utenteRepository, Cloudinary cloudinaryUploader, PasswordEncoder bcrypt) {
+    public UtenteService(UtenteRepository utenteRepository, Cloudinary cloudinaryUploader, PasswordEncoder bcrypt, EmailSender emailSender) {
         this.utenteRepository = utenteRepository;
         this.cloudinaryUploader = cloudinaryUploader;
         this.bcrypt = bcrypt;
+        this.emailSender = emailSender;
     }
 
     public Utente save(UtenteDTO body) {
@@ -51,6 +54,8 @@ public class UtenteService {
 
         ruoloUser.setUtente(utente);
         utente.getRuolo().add(ruoloUser);
+
+        this.emailSender.sendRegistrationEmail(utente);
 
         return utenteRepository.save(utente);
     }
