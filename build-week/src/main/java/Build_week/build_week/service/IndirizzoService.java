@@ -43,4 +43,25 @@ public class IndirizzoService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.indirizzoRepository.findAll(pageable);
     }
+
+    public void findIndirizzoByIdAndDelete(UUID indirizzoId) {
+        Indirizzo found = this.findIndirizzoById(indirizzoId);
+        this.indirizzoRepository.delete(found);
+        log.info("L'indirizzo in via {} è stato eliminato con successo", found.getVia());
+    }
+
+    public Indirizzo findIndirizzoByIdAndUpdate(UUID indirizzoId, IndirizzoDTO body) {
+        Indirizzo foundIndirizzo = this.findIndirizzoById(indirizzoId);
+        Comune foundComune = this.comuneService.findComuneById(body.comuneId());
+
+        foundIndirizzo.setCap(body.cap());
+        foundIndirizzo.setVia(body.via());
+        foundIndirizzo.setCivico(body.civico());
+        foundIndirizzo.setLocalita(body.localita());
+        foundIndirizzo.setComuneId(foundComune);
+
+        Indirizzo saved = this.indirizzoRepository.save(foundIndirizzo);
+        log.info("L'indirizzo è stato aggiornato con successo");
+        return saved;
+    }
 }
