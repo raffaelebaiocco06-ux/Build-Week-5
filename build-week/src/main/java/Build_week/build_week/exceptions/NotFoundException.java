@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(UUID id) {
-        super("Risorsa con id " + id + " non trovata");
+        super("Il record con id " + id + " non è stato trovato!");
     }
 
     public NotFoundException(String message) {
