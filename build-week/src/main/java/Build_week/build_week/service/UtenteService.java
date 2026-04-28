@@ -162,9 +162,9 @@ public class UtenteService {
 
         Utente utente = this.findById(utenteId);
 
-        if (!utente.getRuoli().contains("ROLE_ADMIN")) {
-            utente.setRuoli(utente.getRuoli() + ",ROLE_ADMIN");
-        }
+//        if (!utente.getRuolo().contains("ROLE_ADMIN")) {
+//            utente.setRuolo(utente.getRuolo() + ",ROLE_ADMIN");
+//        }
 
         return this.utenteRepository.save(utente);
     }

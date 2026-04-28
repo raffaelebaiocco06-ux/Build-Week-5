@@ -1,6 +1,7 @@
 package Build_week.build_week.service;
 
 import Build_week.build_week.entities.Provincia;
+import Build_week.build_week.exceptions.NotFoundException;
 import Build_week.build_week.repository.ProvinciaRepository;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -41,7 +42,7 @@ public class ProvinciaService {
                 String provincia = riga[1];
                 String regione = riga[2];
 
-                Provincia provincia1 = new Provincia(regione, sigla, provincia);
+                Provincia provincia1 = new Provincia(provincia, sigla, regione);
                 province.add(provincia1);
             }
             return province;
@@ -55,5 +56,13 @@ public class ProvinciaService {
                 provinciaRepository.save(p);
             }
         }
+    }
+
+    public Provincia findByNome(String nome) {
+        return this.provinciaRepository.findByNome(nome).orElseThrow(() -> new NotFoundException("La provincia " + nome + " non è stata trovata"));
+    }
+
+    public List<Provincia> findAll() {
+        return this.provinciaRepository.findAll();
     }
 }
