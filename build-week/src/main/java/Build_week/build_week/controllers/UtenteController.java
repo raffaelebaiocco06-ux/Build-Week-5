@@ -45,7 +45,7 @@ public class UtenteController {
     @GetMapping
     public Page<Utente> getUtenti(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size,
-                                  @RequestParam(defaultValue = "username") String sortBy) {
+                                  @RequestParam(defaultValue = "email") String sortBy) {
         return this.utenteService.findAll(page, size, sortBy);
     }
 
@@ -85,8 +85,7 @@ public class UtenteController {
 
     @PostMapping("/{id}/ruoli")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Utente aggiungiRuolo(@PathVariable UUID id,
-                                @RequestParam String ruolo) {
+    public Utente aggiungiRuolo(@PathVariable UUID id, @RequestParam String ruolo) {
 
         return utenteService.aggiungiRuolo(id, ruolo);
     }
