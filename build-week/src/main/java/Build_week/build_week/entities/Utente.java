@@ -47,7 +47,7 @@ public class Utente implements UserDetails {
     @Column
     private String avatar;
 
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<RuoloUtente> ruolo = new HashSet<>();
 
     public Utente(String username, String email, String password, String nome, String cognome) {
@@ -56,12 +56,14 @@ public class Utente implements UserDetails {
         this.password = password;
         this.nome = nome;
         this.cognome = cognome;
+        this.avatar = "https://ui-avatars.com/api/?name=" + nome + "+" + cognome;
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {
         return ruolo.stream()
                 .map(r -> new SimpleGrantedAuthority(r.getRuolo()))
                 .toList();
     }
+    
 }
