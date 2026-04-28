@@ -38,8 +38,8 @@ public class FatturaService {
         return fatturaRepository.findByClienteId(clienteId, pageable);
     }
 
-    public Page<Fattura> findByStato(String stato, Pageable pageable) {
-        return fatturaRepository.findByStatoIgnoreCase(stato, pageable);
+    public Page<Fattura> findByStato(String nomeStato, Pageable pageable) {
+        return fatturaRepository.findByStato_NomeIgnoreCase(nomeStato, pageable);
     }
 
     public Page<Fattura> findByData(LocalDate data, Pageable pageable) {

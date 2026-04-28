@@ -26,11 +26,11 @@ public class Fattura {
     @Column(nullable = false, unique = true)
     private Long numero;
 
-    @Column(nullable = false)
-    private String stato;
+    @ManyToOne
+    @JoinColumn(name = "stato_id", nullable = false)
+    private StatoFattura stato;
 
-   /* @ManyToOne
+    /* @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente; */
-
 }
