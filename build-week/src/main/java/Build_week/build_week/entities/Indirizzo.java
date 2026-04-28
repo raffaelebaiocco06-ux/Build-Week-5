@@ -31,13 +31,13 @@ public class Indirizzo {
 
     @OneToOne
     @JoinColumn(nullable = false, name = "comune_id")
-    private Comune comune;
+    private Comune comuneId;
 
     public Indirizzo(String via, String civico, String localita, int cap, Comune comune) {
         this.via = via;
         this.civico = civico;
         this.localita = localita;
         this.cap = cap;
-        this.comune = comune;
+        this.comuneId = comune;
     }
 }
