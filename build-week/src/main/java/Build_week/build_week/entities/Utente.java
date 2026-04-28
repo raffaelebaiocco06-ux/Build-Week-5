@@ -65,4 +65,5 @@ public class Utente implements UserDetails {
                 .map(r -> new SimpleGrantedAuthority(r.getRuolo()))
                 .toList();
     }
+    
 }
