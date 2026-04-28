@@ -1,6 +1,7 @@
 package Build_week.build_week.services;
 
 import Build_week.build_week.entities.Fattura;
+import Build_week.build_week.exceptions.NotFoundException;
 import Build_week.build_week.repositories.FatturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public class FatturaService {
     }
 
     public Fattura findById(UUID id) {
-        return fatturaRepository.findById(id).orElseThrow(() -> new RuntimeException("Fattura non trovata"));
+        return fatturaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
     public void delete(UUID id) {

@@ -16,7 +16,7 @@ public interface FatturaRepository extends JpaRepository<Fattura, UUID> {
 
     Page<Fattura> findByClienteId(UUID clienteId, Pageable pageable);
 
-    Page<Fattura> findByStatoIgnoreCase(String stato, Pageable pageable);
+    Page<Fattura> findByStatoNomeIgnoreCase(String nomeStato, Pageable pageable);
 
     Page<Fattura> findByData(LocalDate data, Pageable pageable);
 
@@ -24,4 +24,6 @@ public interface FatturaRepository extends JpaRepository<Fattura, UUID> {
     Page<Fattura> findByAnno(@Param("anno") int anno, Pageable pageable);
 
     Page<Fattura> findByImportoBetween(Double min, Double max, Pageable pageable);
+
+    Page<Fattura> findByStatoIgnoreCase(String stato, Pageable pageable);
 }
