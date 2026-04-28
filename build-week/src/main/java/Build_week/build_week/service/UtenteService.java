@@ -6,6 +6,7 @@ import Build_week.build_week.exceptions.BadRequestException;
 import Build_week.build_week.exceptions.NotFoundException;
 import Build_week.build_week.payload.UtenteDTO;
 import Build_week.build_week.repository.UtenteRepository;
+import Build_week.build_week.tools.EmailSender;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -25,35 +26,38 @@ import java.util.UUID;
 @Slf4j
 public class UtenteService {
 
+    public final EmailSender emailSender;
     private final UtenteRepository utenteRepository;
     private final Cloudinary cloudinaryUploader;
     private final PasswordEncoder bcrypt;
 
-    public UtenteService(UtenteRepository utenteRepository, Cloudinary cloudinaryUploader, PasswordEncoder bcrypt) {
+    public UtenteService(UtenteRepository utenteRepository, Cloudinary cloudinaryUploader, PasswordEncoder bcrypt, EmailSender emailSender) {
         this.utenteRepository = utenteRepository;
         this.cloudinaryUploader = cloudinaryUploader;
         this.bcrypt = bcrypt;
+        this.emailSender = emailSender;
     }
 
     public Utente save(UtenteDTO body) {
 
-        if (this.utenteRepository.existsByUsername(body.username())) {
-            throw new BadRequestException("L'username " + body.username() + " è già in uso");
+        if (utenteRepository.existsByUsername(body.username())) {
+            throw new BadRequestException("Username già in uso");
         }
 
-        if (this.utenteRepository.existsByEmail(body.email())) {
-            throw new BadRequestException("L'email " + body.email() + " è già in uso");
+        if (utenteRepository.existsByEmail(body.email())) {
+            throw new BadRequestException("Email già in uso");
         }
 
-        String username = body.username().toLowerCase().trim();
-        String email = body.email().toLowerCase().trim();
+        Utente utente = new Utente(body.username().toLowerCase().trim(), body.email().toLowerCase().trim(), bcrypt.encode(body.password()), body.nome(), body.cognome());
 
-        Utente newUtente = new Utente(username, email, this.bcrypt.encode(body.password()), body.nome(), body.cognome());
-        Utente savedUtente = this.utenteRepository.save(newUtente);
+        RuoloUtente ruoloUser = new RuoloUtente("USER");
 
-        log.info("L'utente con id " + savedUtente.getId() + " è stato salvato correttamente");
+        ruoloUser.setUtente(utente);
+        utente.getRuolo().add(ruoloUser);
 
-        return savedUtente;
+        this.emailSender.sendRegistrationEmail(utente);
+
+        return utenteRepository.save(utente);
     }
 
     public Page<Utente> findAll(int page, int size, String sortBy) {
@@ -65,10 +69,6 @@ public class UtenteService {
 
     public Utente findById(UUID utenteId) {
         return this.utenteRepository.findById(utenteId).orElseThrow(() -> new NotFoundException(utenteId));
-    }
-
-    public Utente findByUsername(String username) {
-        return this.utenteRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Username non trovato"));
     }
 
     public Utente findByEmail(String email) {
@@ -94,8 +94,8 @@ public class UtenteService {
                 throw new BadRequestException("L'email " + body.email() + "è gia in uso");
         }
 
-        found.setUsername(body.username());
-        found.setEmail(body.email());
+        found.setUsername(newUsername);
+        found.setEmail(newEmail);
         found.setNome(body.nome());
         found.setCognome(body.cognome());
 
@@ -130,56 +130,50 @@ public class UtenteService {
             throw new BadRequestException("File troppo grande (max 2MB)");
         }
 
-        String contentType = file.getContentType();
-        if (contentType == null ||
-                !(contentType.equals("image/png") ||
-                        contentType.equals("image/jpeg") ||
-                        contentType.equals("image/gif"))) {
-            throw new BadRequestException("Formato file non supportato");
-        }
-
         Utente found = this.findById(utenteId);
 
         try {
             Map result = cloudinaryUploader.uploader()
-                    .upload(file.getBytes(), ObjectUtils.emptyMap());
+                    .upload(file.getBytes(),
+                            ObjectUtils.asMap(
+                                    "folder", "avatars",
+                                    "resource_type", "image"
+                            ));
+
+            log.info("Cloudinary response: {}", result);
 
             String url = (String) result.get("secure_url");
 
+            if (url == null) {
+                throw new RuntimeException("Upload fallito: secure_url nullo");
+            }
+
             found.setAvatar(url);
 
-            Utente updatedUtente = this.utenteRepository.save(found);
-
-            log.info("Avatar aggiornato per il dipendente con id " + updatedUtente.getId());
-
-            return updatedUtente;
+            return utenteRepository.save(found);
 
         } catch (IOException e) {
-            throw new RuntimeException("Errore durante upload avatar", e);
+            throw new RuntimeException("Errore upload Cloudinary", e);
         }
     }
 
-    public Utente promuoviAdAdmin(UUID utenteId) {
+    public Utente aggiungiRuolo(UUID utenteId, String nomeRuolo) {
 
-        Utente utente = this.findById(utenteId);
+        Utente utente = findById(utenteId);
 
-        if (!utente.getRuoli().contains("ROLE_ADMIN")) {
-            utente.setRuoli(utente.getRuoli() + ",ROLE_ADMIN");
+        boolean esiste = utente.getRuolo()
+                .stream()
+                .anyMatch(r -> r.getRuolo().equalsIgnoreCase(nomeRuolo));
+
+        if (esiste) {
+            throw new BadRequestException("Ruolo già assegnato");
         }
 
-        return this.utenteRepository.save(utente);
-    }
+        RuoloUtente ruolo = new RuoloUtente(nomeRuolo.toUpperCase().trim());
+        ruolo.setUtente(utente);
 
-//    public Utente aggiungiRuolo(UUID utenteId, String nuovoRuolo) {
-//
-//        Utente utente = this.findById(utenteId);
-//
-//        String ruoloFormattato = "ROLE_" + nuovoRuolo.toUpperCase();
-//
-//        if (!utente.getRuoli().contains(ruoloFormattato)) {
-//            utente.getRuoli().add(ruoloFormattato);
-//        }
-//
-//        return this.utenteRepository.save(utente);
-//    }
+        utente.getRuolo().add(ruolo);
+
+        return utenteRepository.save(utente);
+    }
 }

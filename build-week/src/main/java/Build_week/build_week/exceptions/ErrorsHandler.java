@@ -19,13 +19,13 @@ public class ErrorsHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsListDTO handleValidationErrors(ValidationException ex) {
         return new ErrorsListDTO(ex.getMessage(), LocalDateTime.now(), ex.getErrors());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorsDTO handleUnauthorizedEx(UnauthorizedException ex) {
         return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
     }
