@@ -1,6 +1,7 @@
 package Build_week.build_week.controllers;
 
 import Build_week.build_week.entities.Fattura;
+import Build_week.build_week.payloads.FatturaDTO;
 import Build_week.build_week.services.FatturaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -33,7 +35,7 @@ public class FatturaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Fattura create(@RequestBody Fattura body) {
+    public Fattura create(@RequestBody @Validated FatturaDTO body) {
         return fatturaService.save(body);
     }
 

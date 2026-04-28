@@ -1,7 +1,9 @@
 package Build_week.build_week.services;
 
 import Build_week.build_week.entities.Fattura;
+import Build_week.build_week.entities.StatoFattura;
 import Build_week.build_week.exceptions.NotFoundException;
+import Build_week.build_week.payloads.FatturaDTO;
 import Build_week.build_week.repositories.FatturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,8 +19,17 @@ public class FatturaService {
     @Autowired
     private FatturaRepository fatturaRepository;
 
-    public Fattura save(Fattura fattura) {
-        return fatturaRepository.save(fattura);
+    @Autowired
+    private StatoFatturaService statoFatturaService;
+
+    public Fattura save(FatturaDTO body) {
+        StatoFattura stato = statoFatturaService.findById(body.statoId());
+        Fattura nuovaFattura = new Fattura();
+        nuovaFattura.setData(body.data());
+        nuovaFattura.setImporto(body.importo());
+        nuovaFattura.setNumero(body.numero());
+        nuovaFattura.setStato(stato);
+        return fatturaRepository.save(nuovaFattura);
     }
 
     public Page<Fattura> findAll(Pageable pageable) {
