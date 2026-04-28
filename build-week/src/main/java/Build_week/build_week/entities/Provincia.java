@@ -1,6 +1,10 @@
 package Build_week.build_week.entities;
 
-import jakarta.persistence.*;
+import com.opencsv.bean.CsvBindByName;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.util.UUID;
@@ -8,7 +12,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "province")
 @NoArgsConstructor
-@Getter
 @Setter
 @ToString
 public class Provincia {
@@ -17,14 +20,21 @@ public class Provincia {
     @Setter(AccessLevel.NONE)
     private UUID provinciaId;
 
-    @Column(nullable = false)
-    private String nome;
-
-    @Column(nullable = false)
+    @Getter
+    @CsvBindByName(column = "Sigla")
     private String sigla;
 
-    public Provincia(String nome, String sigla) {
+    @Getter
+    @CsvBindByName(column = "Provincia")
+    private String nome;
+
+    @Getter
+    @CsvBindByName(column = "Regione")
+    private String regione;
+
+    public Provincia(String nome, String sigla, String regione) {
         this.nome = nome;
         this.sigla = sigla;
+        this.regione = regione;
     }
 }
