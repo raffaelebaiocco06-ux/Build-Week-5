@@ -3,6 +3,7 @@ package Build_week.build_week.controllers;
 import Build_week.build_week.entities.Cliente;
 import Build_week.build_week.payload.ClienteDTO;
 import Build_week.build_week.service.ClienteService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,12 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
+    @GetMapping
+    public Page<Cliente> findAll(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "10") int size,
+                                   @RequestParam(defaultValue = "nomeContatto") String sortBy) {
+        return clienteService.findAll(page, size, sortBy);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -74,5 +81,6 @@ public class ClienteController {
     public List<Cliente> cercaPerNome(@RequestParam String nome) {
         return clienteService.cercaClientiPerNome(nome);
     }
+    //manca la delete
 }
 

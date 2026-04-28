@@ -7,6 +7,10 @@ import Build_week.build_week.exceptions.NotFoundException;
 import Build_week.build_week.payload.ClienteDTO;
 import Build_week.build_week.repository.ClienteRepository;
 import Build_week.build_week.repository.IndirizzoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -38,7 +42,10 @@ public class ClienteService {
         return clienteRepository.save(nuovocliente);
 }
 
-
+    public Page<Cliente> findAll(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return clienteRepository.findAll(pageable);
+    }
     public Cliente findById(UUID id){
         return clienteRepository.findById(id).orElseThrow(() -> new NotFoundException("Utente con id " + id + " non trovato"));
     }

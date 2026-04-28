@@ -45,11 +45,14 @@ public class Cliente {
     private String telefonoContatto;
     @Column(nullable = false, unique = true)
     private String logoAziendale;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoAzienda tipoAzienda;
-    @Column(nullable = false)
+    @OneToOne
+    @JoinColumn(name = "indirizzo_sede_legale_id",nullable = false)
     private Indirizzo indirizzoSedeLegale;
-    @Column(nullable = false)
+    @OneToOne
+    @JoinColumn(name = "indirizzo_sede_operativa_id",nullable = false)
     private Indirizzo indirizzoSedeOperativa;
 
     public Cliente(String ragioneSociale, String pIva, String email, LocalDate dataInserimento, LocalDate dataUltimoContatto, long fatturatoTot, String pec, String telefono, String nomeContatto, String emailContatto, String cognomeContatto, String telefonoContatto, String logoAziendale, TipoAzienda tipoAzienda, Indirizzo indirizzoSedeLegale, Indirizzo indirizzoSedeOperativa) {
