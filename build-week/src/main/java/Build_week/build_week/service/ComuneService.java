@@ -2,6 +2,7 @@ package Build_week.build_week.service;
 
 import Build_week.build_week.entities.Comune;
 import Build_week.build_week.entities.Provincia;
+import Build_week.build_week.exceptions.NotFoundException;
 import Build_week.build_week.repository.ComuneRepository;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -15,6 +16,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,5 +71,9 @@ public class ComuneService {
                 comuneRepository.save(c);
             }
         }
+    }
+
+    public Comune findComuneById(UUID comuneId) {
+        return this.comuneRepository.findById(comuneId).orElseThrow(() -> new NotFoundException(comuneId));
     }
 }
