@@ -23,7 +23,7 @@ public class Cliente {
     private String ragioneSociale;
     @Column(nullable = false)
     private String pIva;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)// da mettere in relazione con utenti
     private String email;
     @Column(nullable = false)
     private LocalDate dataInserimento;
@@ -47,11 +47,12 @@ public class Cliente {
     private String logoAziendale;
     @Column(nullable = false)
     private TipoAzienda tipoAzienda;
+    @Column(nullable = false)
+    private Indirizzo indirizzoSedeLegale;
+    @Column(nullable = false)
+    private Indirizzo indirizzoSedeOperativa;
 
-//qui ci va indirizzo sede legale
-// qui ci va indirizzo sede operativa
-
-    public Cliente(String ragioneSociale, String pIva, String email, LocalDate dataInserimento, LocalDate dataUltimoContatto, long fatturatoTot, String pec, String telefono, String emailContatto, String nomeContatto, String cognomeContatto, String telefonoContatto, String logoAziendale, TipoAzienda tipoAzienda) {
+    public Cliente(String ragioneSociale, String pIva, String email, LocalDate dataInserimento, LocalDate dataUltimoContatto, long fatturatoTot, String pec, String telefono, String nomeContatto, String emailContatto, String cognomeContatto, String telefonoContatto, String logoAziendale, TipoAzienda tipoAzienda, Indirizzo indirizzoSedeLegale, Indirizzo indirizzoSedeOperativa) {
         this.ragioneSociale = ragioneSociale;
         this.pIva = pIva;
         this.email = email;
@@ -60,11 +61,13 @@ public class Cliente {
         this.fatturatoTot = fatturatoTot;
         this.pec = pec;
         this.telefono = telefono;
-        this.emailContatto = emailContatto;
         this.nomeContatto = nomeContatto;
+        this.emailContatto = emailContatto;
         this.cognomeContatto = cognomeContatto;
         this.telefonoContatto = telefonoContatto;
         this.logoAziendale = logoAziendale;
         this.tipoAzienda = tipoAzienda;
+        this.indirizzoSedeLegale = indirizzoSedeLegale;
+        this.indirizzoSedeOperativa = indirizzoSedeOperativa;
     }
 }
