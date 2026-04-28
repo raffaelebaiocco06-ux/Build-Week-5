@@ -11,14 +11,18 @@ import java.util.Map;
 @Configuration
 public class Config {
     @Bean
-    public Cloudinary getImageUploader(@Value("${cloudinary.name}") String cloudName,
-                                       @Value("${cloudinary.apikey}") String apiKey,
-                                       @Value("${cloudinary.secret}") String apiSecret) {
-        Map<String, String> configuration = new HashMap<>();
-        configuration.put("cloud_name", cloudName);
-        configuration.put("api_key", apiKey);
-        configuration.put("api_secret", apiSecret);
+    public Cloudinary getImageUploader(
+            @Value("${cloudinary.name}") String cloudName,
+            @Value("${cloudinary.apikey}") String apiKey,
+            @Value("${cloudinary.secret}") String apiSecret) {
 
-        return new Cloudinary(configuration);
+        Map<String, Object> config = new HashMap<>();
+
+        config.put("cloud_name", cloudName);
+        config.put("api_key", apiKey);
+        config.put("api_secret", apiSecret);
+        config.put("secure", true);
+
+        return new Cloudinary(config);
     }
 }

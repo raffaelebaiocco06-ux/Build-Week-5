@@ -20,7 +20,7 @@ public class RuoloUtente {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String ruolo;
 
     @ManyToOne

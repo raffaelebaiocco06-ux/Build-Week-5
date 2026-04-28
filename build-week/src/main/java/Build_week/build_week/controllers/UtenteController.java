@@ -71,27 +71,23 @@ public class UtenteController {
     }
 
     @PutMapping("/{utenteId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Utente getByIdAndUpdate(@PathVariable UUID utenteId, @RequestBody UtenteDTO body) {
         return this.utenteService.findByIdAndUpdate(utenteId, body);
     }
 
     @DeleteMapping("/{utenteId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void getByIdAndDelete(@PathVariable UUID utenteId) {
         this.utenteService.findByIdAndDelete(utenteId);
     }
 
-    @PutMapping("/{id}/promuovi")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Utente promuovi(@PathVariable UUID id) {
-        return utenteService.promuoviAdAdmin(id);
-    }
+    @PostMapping("/{id}/ruoli")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Utente aggiungiRuolo(@PathVariable UUID id,
+                                @RequestParam String ruolo) {
 
-//    @PutMapping("/{id}/ruoli/{ruolo}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//    public Utente aggiungiRuolo(@PathVariable UUID id, @PathVariable String ruolo) {
-//        return utenteService.aggiungiRuolo(id, ruolo);
-//    }
+        return utenteService.aggiungiRuolo(id, ruolo);
+    }
 }
