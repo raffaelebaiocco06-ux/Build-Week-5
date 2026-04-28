@@ -61,7 +61,7 @@ public class UtenteService {
     }
 
     public Page<Utente> findAll(int page, int size, String sortBy) {
-        if (size > 100 || size < 0) size = 10;
+        if (size > 10 || size < 0) size = 10;
         if (page < 10) page = 0;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.utenteRepository.findAll(pageable);

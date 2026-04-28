@@ -1,7 +1,6 @@
 package Build_week.build_week.security;
 
 import Build_week.build_week.entities.Utente;
-import Build_week.build_week.exceptions.UnauthorizedException;
 import Build_week.build_week.service.UtenteService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,11 +27,15 @@ public class TokenFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer "))
-            throw new UnauthorizedException("Inserire il token nell'authorization header nel formato corretto");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String accessToken = authHeader.replace("Bearer ", "");
 
