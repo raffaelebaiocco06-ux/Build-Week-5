@@ -60,6 +60,11 @@ public class ClienteController {
         return clienteService.ordinaPerDataUltimoContatto();
     }
 
+    @GetMapping("/ordina/provincia-sede-legale")
+    public List<Cliente> ordinaperProvinciadellaSedeLegale(){
+        return clienteService.ordinaPerProvinciaSedeLegale();
+    }
+
 
 
     @GetMapping("/filtra/fatturato")
@@ -82,5 +87,11 @@ public class ClienteController {
         return clienteService.cercaClientiPerNome(nome);
     }
     //manca la delete
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteC(@PathVariable UUID id){
+        clienteService.findByIdAndDelete(id);
+    }
 }
 

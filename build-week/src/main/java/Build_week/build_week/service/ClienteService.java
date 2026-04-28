@@ -66,6 +66,9 @@ public class ClienteService {
     public List<Cliente> ordinaPerDataUltimoContatto() {
         return clienteRepository.findAllByOrderByDataUltimoContattoAsc();
     }
+    public List<Cliente> ordinaPerProvinciaSedeLegale() {
+        return clienteRepository.findAllByOrderByIndirizzoSedeLegale_Comune_ProvinciaAsc();
+    }
 
     public List<Cliente> filtraPerFatturato(Double minimo, Double massimo) {
         if (minimo == null || massimo == null) {
@@ -93,6 +96,10 @@ public class ClienteService {
             return Collections.emptyList();
         }
         return clienteRepository.findByNomeContattoContainingIgnoreCase(parteNome);
+    }
+    public void findByIdAndDelete(UUID id){
+        Cliente trovato = this.findById(id);
+        this.clienteRepository.delete(trovato);
     }
 
 }
