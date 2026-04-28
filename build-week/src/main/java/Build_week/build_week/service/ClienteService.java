@@ -37,7 +37,7 @@ public class ClienteService {
 
         Indirizzo sedeLegale= indirizzoRepository.findById(body.indirizzoSedeLegaleId()).orElseThrow(()-> new NotFoundException("Indirizzo sede legale non trovato"));
         Indirizzo sedeOperativa= indirizzoRepository.findById(body.indirizzoSedeOperativaId()).orElseThrow(()-> new NotFoundException("Indirizzo sede operativa non trovato"));
-
+//madonna lupa
         Cliente nuovocliente= new Cliente(body.ragioneSociale(),body.pIva(),body.email(),body.dataInserimento(),body.dataUltimoContatto(),body.fatturatoTot(),body.pec(),body.telefono(),body.emailContatto(),body.nomeContatto(),body.cognomeContatto(),body.telefonoContatto(),body.logoAziendale(),body.tipoAzienda(),sedeLegale,sedeOperativa);
         return clienteRepository.save(nuovocliente);
 }
@@ -67,7 +67,7 @@ public class ClienteService {
         return clienteRepository.findAllByOrderByDataUltimoContattoAsc();
     }
     public List<Cliente> ordinaPerProvinciaSedeLegale() {
-        return clienteRepository.findAllByOrderByIndirizzoSedeLegale_Comune_ProvinciaAsc();
+        return clienteRepository.findAllByOrderByIndirizzoSedeLegale_ComuneId_ProvinciaAsc();
     }
 
     public List<Cliente> filtraPerFatturato(Double minimo, Double massimo) {
