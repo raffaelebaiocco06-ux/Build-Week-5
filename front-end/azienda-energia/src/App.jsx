@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./assets/Components/Home";
-import Get from "./assets/Components/Get";
-import Post from "./assets/Components/Post";
-import Delete from "./assets/Components/delete";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Home from "./assets/Components/Home"
+import Post from "./assets/Components/Post"
+import Delete from "./assets/Components/delete"
+import GetClienti from "./assets/Components/GetClienti"
 
 function App() {
   return (
@@ -10,13 +10,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/get" element={<Get />} />
+          <Route path="/get" element={<GetClienti />} />
           <Route path="/post" element={<Post />} />
           <Route path="/delete" element={<Delete />} />
         </Routes>
       </BrowserRouter>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
