@@ -1,6 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Home from "./assets/Components/Home"
-import Post from "./assets/Components/Post"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./assets/Components/Home";
+import Get from "./assets/Components/Get";
+import Post from "./assets/Components/Post";
+import Registration from "./assets/Components/Registration";
+import Login from "./assets/Components/Login";
 import Delete from "./assets/Components/delete"
 import GetClienti from "./assets/Components/GetClienti"
 
@@ -12,7 +15,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/get" element={<GetClienti />} />
           <Route path="/post" element={<Post />} />
-          <Route path="/delete" element={<Delete />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </>
