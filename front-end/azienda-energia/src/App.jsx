@@ -4,8 +4,7 @@ import Home from "./assets/Components/Home";
 import GetClienti from "./assets/Components/GetClienti";
 import Registration from "./assets/Components/Registration";
 import Login from "./assets/Components/Login";
-import Delete from "./assets/Components/delete";
-import GetClienti from "./assets/Components/GetClienti";
+import GetFatture from "./assets/Components/GetFatture";
 
 function App() {
   return (
@@ -13,7 +12,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/get" element={<GetClienti />} />
+          <Route path="/getClienti" element={<GetClienti />} />
+          <Route path="/getFatture" element={<GetFatture />} />
 
           <Route path="/registration" element={<Registration />} />
           <Route path="/login" element={<Login />} />

@@ -10,8 +10,11 @@ function Home() {
         </div>{" "}
         <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
         <div className="d-flex flex-column gap-3 mt-3">
-          <Link to="/get" className="btn btn-light border">
-            GET
+          <Link to="/getClienti" className="btn btn-light border">
+            GET CLIENTI
+          </Link>
+          <Link to="/getFatture" className="btn btn-light border">
+            GET FATTURE
           </Link>
 
           <Link to="/registration" className="btn btn-light border">

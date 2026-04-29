@@ -1,83 +1,86 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function GetClienti() {
-  const [clienti, setClienti] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [errore, setErrore] = useState(null)
+  const [clienti, setClienti] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [errore, setErrore] = useState(null);
 
-  const [nome, setNome] = useState("")
-  const [minFatturato, setMinFatturato] = useState("")
-  const [maxFatturato, setMaxFatturato] = useState("")
+  const [nome, setNome] = useState("");
+  const [minFatturato, setMinFatturato] = useState("");
+  const [maxFatturato, setMaxFatturato] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true)
-        setErrore(null)
+        setLoading(true);
+        setErrore(null);
 
-        const response = await fetch("http://localhost:3001/clienti")
-        if (!response.ok) throw new Error("Errore server")
+        const response = await fetch("http://localhost:3001/clienti");
+        if (!response.ok) throw new Error("Errore server");
 
-        const data = await response.json()
+        const data = await response.json();
 
-        setClienti(data.content || data)
+        setClienti(data.content || data);
       } catch (err) {
-        setErrore(err.message)
+        setErrore(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const handleFiltri = async () => {
     try {
-      setLoading(true)
-      setErrore(null)
+      setLoading(true);
+      setErrore(null);
 
-      let url = "http://localhost:3001/clienti"
-      const params = new URLSearchParams()
+      let url = "http://localhost:3001/clienti";
+      const params = new URLSearchParams();
 
-      if (nome) params.append("nome", nome)
-      if (minFatturato) params.append("minFatturato", minFatturato)
-      if (maxFatturato) params.append("maxFatturato", maxFatturato)
+      if (nome) params.append("nome", nome);
+      if (minFatturato) params.append("minFatturato", minFatturato);
+      if (maxFatturato) params.append("maxFatturato", maxFatturato);
 
       if ([...params].length > 0) {
-        url += `?${params.toString()}`
+        url += `?${params.toString()}`;
       }
 
-      const response = await fetch(url)
-      if (!response.ok) throw new Error("Errore server")
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Errore server");
 
-      const data = await response.json()
+      const data = await response.json();
 
-      setClienti(data.content || data)
+      setClienti(data.content || data);
     } catch (err) {
-      setErrore(err.message)
+      setErrore(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const resetFiltri = async () => {
-    setNome("")
-    setMinFatturato("")
-    setMaxFatturato("")
+    setNome("");
+    setMinFatturato("");
+    setMaxFatturato("");
 
     try {
-      setLoading(true)
+      setLoading(true);
 
-      const response = await fetch("http://localhost:3001/clienti")
-      const data = await response.json()
+      const response = await fetch("http://localhost:3001/clienti");
+      const data = await response.json();
 
-      setClienti(data.content || data)
+      setClienti(data.content || data);
     } catch (err) {
-      setErrore(err.message)
+      setErrore(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="container-fluid mt-3 px-5 p-0">
@@ -85,32 +88,15 @@ function GetClienti() {
 
       <div className="row mb-3 g-2">
         <div className="col">
-          <input
-            className="form-control"
-            placeholder="Nome contatto"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          />
+          <input className="form-control" placeholder="Nome contatto" value={nome} onChange={(e) => setNome(e.target.value)} />
         </div>
 
         <div className="col">
-          <input
-            className="form-control"
-            placeholder="Min fatturato"
-            type="number"
-            value={minFatturato}
-            onChange={(e) => setMinFatturato(e.target.value)}
-          />
+          <input className="form-control" placeholder="Min fatturato" type="number" value={minFatturato} onChange={(e) => setMinFatturato(e.target.value)} />
         </div>
 
         <div className="col">
-          <input
-            className="form-control"
-            placeholder="Max fatturato"
-            type="number"
-            value={maxFatturato}
-            onChange={(e) => setMaxFatturato(e.target.value)}
-          />
+          <input className="form-control" placeholder="Max fatturato" type="number" value={maxFatturato} onChange={(e) => setMaxFatturato(e.target.value)} />
         </div>
 
         <div className="col-auto">
@@ -125,6 +111,10 @@ function GetClienti() {
           </button>
         </div>
       </div>
+
+      <button className="btn btn-danger mb-3" onClick={() => navigate("/getFatture")}>
+        Vai alle Fatture
+      </button>
 
       {loading && (
         <div className="text-center">
@@ -166,7 +156,7 @@ function GetClienti() {
         </table>
       )}
     </div>
-  )
+  );
 }
 
-export default GetClienti
+export default GetClienti;

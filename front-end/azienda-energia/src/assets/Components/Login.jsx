@@ -31,7 +31,7 @@ function Login() {
       localStorage.setItem("accessToken", accessToken);
 
       alert("login completato");
-      navigate("/get");
+      navigate("/getClienti");
     } catch (error) {
       setError(error.message);
     }
