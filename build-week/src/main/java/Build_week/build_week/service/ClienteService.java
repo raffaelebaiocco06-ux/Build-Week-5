@@ -7,10 +7,12 @@ import Build_week.build_week.exceptions.NotFoundException;
 import Build_week.build_week.payload.ClienteDTO;
 import Build_week.build_week.repository.ClienteRepository;
 import Build_week.build_week.repository.IndirizzoRepository;
+import Build_week.build_week.specification.ClienteSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,69 +39,53 @@ public class ClienteService {
 
         Indirizzo sedeLegale= indirizzoRepository.findById(body.indirizzoSedeLegaleId()).orElseThrow(()-> new NotFoundException("Indirizzo sede legale non trovato"));
         Indirizzo sedeOperativa= indirizzoRepository.findById(body.indirizzoSedeOperativaId()).orElseThrow(()-> new NotFoundException("Indirizzo sede operativa non trovato"));
-//madonna lupa
+
         Cliente nuovocliente= new Cliente(body.ragioneSociale(),body.pIva(),body.email(),body.dataInserimento(),body.dataUltimoContatto(),body.fatturatoTot(),body.pec(),body.telefono(),body.emailContatto(),body.nomeContatto(),body.cognomeContatto(),body.telefonoContatto(),body.logoAziendale(),body.tipoAzienda(),sedeLegale,sedeOperativa);
         return clienteRepository.save(nuovocliente);
 }
-
-    public Page<Cliente> findAll(int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return clienteRepository.findAll(pageable);
-    }
     public Cliente findById(UUID id){
         return clienteRepository.findById(id).orElseThrow(() -> new NotFoundException("Utente con id " + id + " non trovato"));
     }
 
-
-    public List<Cliente> ordinaPerNome() {
-        return clienteRepository.findAllByOrderByNomeContattoAsc();
-    }
-
-    public List<Cliente> ordinaPerFatturato() {
-        return clienteRepository.findAllByOrderByFatturatoTotAsc();
-    }
-
-    public List<Cliente> ordinaPerDataInserimento() {
-        return clienteRepository.findAllByOrderByDataInserimentoAsc();
-    }
-
-    public List<Cliente> ordinaPerDataUltimoContatto() {
-        return clienteRepository.findAllByOrderByDataUltimoContattoAsc();
-    }
-    public List<Cliente> ordinaPerProvinciaSedeLegale() {
-        return clienteRepository.findAllByOrderByIndirizzoSedeLegale_ComuneId_ProvinciaAsc();
-    }
-
-    public List<Cliente> filtraPerFatturato(Double minimo, Double massimo) {
-        if (minimo == null || massimo == null) {
-            return Collections.emptyList();
-        }
-        return clienteRepository.findByFatturatoTotBetween(minimo, massimo);
-    }
-
-    public List<Cliente> filtraPerDataInserimento(LocalDate data) {
-        if (data == null) {
-            return Collections.emptyList();
-        }
-        return clienteRepository.findByDataInserimento(data);
-    }
-
-    public List<Cliente> filtraPerDataUltimoContatto(LocalDate data) {
-        if (data == null) {
-            return Collections.emptyList();
-        }
-        return clienteRepository.findByDataUltimoContatto(data);
-    }
-
-    public List<Cliente> cercaClientiPerNome(String parteNome) {
-        if (parteNome == null || parteNome.isBlank()) {
-            return Collections.emptyList();
-        }
-        return clienteRepository.findByNomeContattoContainingIgnoreCase(parteNome);
-    }
     public void findByIdAndDelete(UUID id){
         Cliente trovato = this.findById(id);
         this.clienteRepository.delete(trovato);
     }
 
+    // qui vo con le specification
+
+    public Page<Cliente> cercaClienti(
+            String nome,
+            Long minFatturato,
+            Long maxFatturato,
+            LocalDate dataInserimento,
+            LocalDate dataUltimoContatto,
+            int page, int size, String sortBy) {
+
+        String sortvia= sortBy;
+        if(sortBy.equalsIgnoreCase("provincia")){
+            sortvia="indirizzoSedeLegale.comuneId.provincia.nome";
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortvia).ascending());
+        Specification<Cliente> spec = Specification.where( (root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
+        if (nome != null) {
+            spec = spec.and(ClienteSpecification.nomeContatto(nome));
+        }
+
+        if (minFatturato != null || maxFatturato != null) {
+            spec = spec.and(ClienteSpecification.FatturatoBeetwen(minFatturato, maxFatturato));
+        }
+
+        if (dataInserimento != null) {
+            spec = spec.and(ClienteSpecification.dataInserimento(dataInserimento));
+        }
+
+        if (dataUltimoContatto != null) {
+            spec = spec.and(ClienteSpecification.dataUltimoContatto(dataUltimoContatto));
+        }
+
+        return clienteRepository.findAll(spec, pageable);
+    }
 }
+
+

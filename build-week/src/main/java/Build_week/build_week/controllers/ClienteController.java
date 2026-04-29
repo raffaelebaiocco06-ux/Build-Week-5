@@ -22,71 +22,24 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @GetMapping
-    public Page<Cliente> findAll(@RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "10") int size,
-                                   @RequestParam(defaultValue = "nomeContatto") String sortBy) {
-        return clienteService.findAll(page, size, sortBy);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente save(@RequestBody @Validated ClienteDTO body) {
         return clienteService.salva(body);
     }
+    
+    @GetMapping
+    public Page<Cliente> getAllClienti(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) Long minFatturato,
+            @RequestParam(required = false) Long maxFatturato,
+            @RequestParam(required = false) LocalDate dataInserimento,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
 
-    @GetMapping("/{id}")
-    public Cliente findById(@PathVariable UUID id) {
-        return clienteService.findById(id);
+        return clienteService.cercaClienti(nome, minFatturato, maxFatturato, dataInserimento, null, page, size, sortBy);
     }
-
-    @GetMapping("/ordina/nome")
-    public List<Cliente> ordinaPerNome() {
-        return clienteService.ordinaPerNome();
-    }
-
-    @GetMapping("/ordina/fatturato")
-    public List<Cliente> ordinaPerFatturato() {
-        return clienteService.ordinaPerFatturato();
-    }
-
-    @GetMapping("/ordina/data-inserimento")
-    public List<Cliente> ordinaPerDataInserimento() {
-        return clienteService.ordinaPerDataInserimento();
-    }
-
-    @GetMapping("/ordina/ultimo-contatto")
-    public List<Cliente> ordinaPerDataUltimoContatto() {
-        return clienteService.ordinaPerDataUltimoContatto();
-    }
-
-    @GetMapping("/ordina/provincia-sede-legale")
-    public List<Cliente> ordinaperProvinciadellaSedeLegale(){
-        return clienteService.ordinaPerProvinciaSedeLegale();
-    }
-
-
-
-    @GetMapping("/filtra/fatturato")
-    public List<Cliente> filtraPerFatturato(@RequestParam Double min, @RequestParam Double max) {
-        return clienteService.filtraPerFatturato(min, max);
-    }
-
-    @GetMapping("/filtra/data-inserimento")
-    public List<Cliente> filtraPerDataInserimento(@RequestParam LocalDate data) {
-        return clienteService.filtraPerDataInserimento(data);
-    }
-
-    @GetMapping("/filtra/ultimo-contatto")
-    public List<Cliente> filtraPerDataUltimoContatto(@RequestParam LocalDate data) {
-        return clienteService.filtraPerDataUltimoContatto(data);
-    }
-
-    @GetMapping("/cerca/nome")
-    public List<Cliente> cercaPerNome(@RequestParam String nome) {
-        return clienteService.cercaClientiPerNome(nome);
-    }
-    //manca la delete
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
