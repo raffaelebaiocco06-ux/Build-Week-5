@@ -22,6 +22,12 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cliente save(@RequestBody @Validated ClienteDTO body) {
+        return clienteService.salva(body);
+    }
+    
     @GetMapping
     public Page<Cliente> getAllClienti(
             @RequestParam(required = false) String nome,
@@ -33,6 +39,12 @@ public class ClienteController {
             @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
 
         return clienteService.cercaClienti(nome, minFatturato, maxFatturato, dataInserimento, null, page, size, sortBy);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteC(@PathVariable UUID id){
+        clienteService.findByIdAndDelete(id);
     }
 }
 
