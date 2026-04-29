@@ -31,7 +31,7 @@ function Login() {
       localStorage.setItem("accessToken", accessToken);
 
       alert("login completato");
-      navigate("/GetClienti");
+      navigate("/get");
     } catch (error) {
       setError(error.message);
     }
@@ -44,21 +44,9 @@ function Login() {
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
           <button type="submit">Login</button>
         </form>
