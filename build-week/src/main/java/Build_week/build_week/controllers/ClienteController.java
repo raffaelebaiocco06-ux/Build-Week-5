@@ -23,6 +23,23 @@ public class ClienteController {
     }
 
     @GetMapping
+    public Page<Cliente> getAllClienti(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) Long minFatturato,
+            @RequestParam(required = false) Long maxFatturato,
+            @RequestParam(required = false) LocalDate dataInserimento,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
+
+        return clienteService.cercaClienti(nome, minFatturato, maxFatturato, dataInserimento, null, page, size, sortBy);
+    }
+
+
+
+
+/*
+    @GetMapping
     public Page<Cliente> findAll(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size,
                                    @RequestParam(defaultValue = "nomeContatto") String sortBy) {
@@ -64,9 +81,10 @@ public class ClienteController {
     public List<Cliente> ordinaperProvinciadellaSedeLegale(){
         return clienteService.ordinaPerProvinciaSedeLegale();
     }
+*/
 
-
-
+//qui ce il filtraggio
+    /*
     @GetMapping("/filtra/fatturato")
     public List<Cliente> filtraPerFatturato(@RequestParam Double min, @RequestParam Double max) {
         return clienteService.filtraPerFatturato(min, max);
@@ -93,5 +111,6 @@ public class ClienteController {
     public void deleteC(@PathVariable UUID id){
         clienteService.findByIdAndDelete(id);
     }
+*/
 }
 
