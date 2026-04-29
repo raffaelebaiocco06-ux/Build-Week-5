@@ -42,4 +42,6 @@ public class ClienteSpecification {
             return criteriaBuilder.equal(root.get("dataUltimoContatto"),data);
         });
     }
+
+
 }

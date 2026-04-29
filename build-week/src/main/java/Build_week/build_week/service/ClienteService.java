@@ -62,8 +62,11 @@ public class ClienteService {
             LocalDate dataUltimoContatto,
             int page, int size, String sortBy) {
 
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        String sortvia= sortBy;
+        if(sortBy.equalsIgnoreCase("provincia")){
+            sortvia="indirizzoSedeLegale.comuneId.provincia.nome";
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortvia).ascending());
         Specification<Cliente> spec = Specification.where( (root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
         if (nome != null) {
             spec = spec.and(ClienteSpecification.nomeContatto(nome));
