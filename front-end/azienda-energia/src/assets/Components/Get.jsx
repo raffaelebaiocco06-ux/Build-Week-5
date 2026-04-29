@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 
 function Get() {
-  const [dati, setDati] = useState([]);
-  const Url = ``; // da mettere il link
+  const [dati, setDati] = useState([])
+  const Url = `` // da mettere il link
   useEffect(() => {
     fetch(Url)
       .then((res) => res.json())
       .then((data) => {
-        setDati(data);
+        setDati(data)
       })
-      .catch((err) => console.log("Errore:", err));
-  }, []);
+      .catch((err) => console.log("Errore:", err))
+  }, [])
 
   return (
     <div className="container-fluid min-vh-100 bg-light py-5">
@@ -38,7 +38,7 @@ function Get() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Get;
+export default Get
