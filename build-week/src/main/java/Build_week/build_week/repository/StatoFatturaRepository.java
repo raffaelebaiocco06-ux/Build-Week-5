@@ -1,4 +1,4 @@
-package Build_week.build_week.repositories;
+package Build_week.build_week.repository;
 
 import Build_week.build_week.entities.StatoFattura;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface StatoFatturaRepository extends JpaRepository<StatoFattura, UUID> {
-    // Ci servirà per verificare se uno stato esiste già o per cercarlo per nome
     Optional<StatoFattura> findByNomeIgnoreCase(String nome);
 }

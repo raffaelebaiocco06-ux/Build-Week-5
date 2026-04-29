@@ -1,8 +1,8 @@
 package Build_week.build_week.controllers;
 
 import Build_week.build_week.entities.Fattura;
-import Build_week.build_week.payloads.FatturaDTO;
-import Build_week.build_week.services.FatturaService;
+import Build_week.build_week.payload.FatturaDTO;
+import Build_week.build_week.service.FatturaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,29 +45,16 @@ public class FatturaController {
     public void delete(@PathVariable UUID id) {
         fatturaService.delete(id);
     }
-
-    @GetMapping("/filter-cliente/{clienteId}")
-    public Page<Fattura> getByCliente(@PathVariable UUID clienteId, Pageable pageable) {
-        return fatturaService.findByCliente(clienteId, pageable);
-    }
-
-    @GetMapping("/filter-stato")
-    public Page<Fattura> getByStato(@RequestParam String stato, Pageable pageable) {
-        return fatturaService.findByStato(stato, pageable);
-    }
-
-    @GetMapping("/filter-data")
-    public Page<Fattura> getByData(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data, Pageable pageable) {
-        return fatturaService.findByData(data, pageable);
-    }
-
-    @GetMapping("/filter-anno")
-    public Page<Fattura> getByAnno(@RequestParam int anno, Pageable pageable) {
-        return fatturaService.findByAnno(anno, pageable);
-    }
-
-    @GetMapping("/filter-importo")
-    public Page<Fattura> getByImporto(@RequestParam Double min, @RequestParam Double max, Pageable pageable) {
-        return fatturaService.findByRangeImporto(min, max, pageable);
+    
+    @GetMapping("/search")
+    public Page<Fattura> search(
+            @RequestParam(required = false) UUID clienteId,
+            @RequestParam(required = false) String stato,
+            @RequestParam(required = false) Integer anno,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+            @RequestParam(required = false) Double min,
+            @RequestParam(required = false) Double max,
+            Pageable pageable) {
+        return fatturaService.filtraFatture(clienteId, stato, anno, data, min, max, pageable);
     }
 }

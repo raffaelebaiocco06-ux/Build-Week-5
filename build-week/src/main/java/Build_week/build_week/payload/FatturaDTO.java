@@ -1,4 +1,4 @@
-package Build_week.build_week.payloads;
+package Build_week.build_week.payload;
 
 import jakarta.validation.constraints.NotNull;
 
