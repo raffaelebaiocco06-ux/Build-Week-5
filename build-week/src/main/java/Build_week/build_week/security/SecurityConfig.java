@@ -39,10 +39,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173/"));
 
         //per ora ho fatto che permette tutti i metodi get post ecc.. se si vuole cambiare si puo scrivere sotto
         configuration.setAllowedMethods(List.of("*"));
