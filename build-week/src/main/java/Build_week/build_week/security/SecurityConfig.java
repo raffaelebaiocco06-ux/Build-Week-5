@@ -42,7 +42,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(/* link del frontend */));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173/"));
 
         //per ora ho fatto che permette tutti i metodi get post ecc.. se si vuole cambiare si puo scrivere sotto
         configuration.setAllowedMethods(List.of("*"));
