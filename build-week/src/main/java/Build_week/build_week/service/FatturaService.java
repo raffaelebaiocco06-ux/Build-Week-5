@@ -1,13 +1,15 @@
-package Build_week.build_week.services;
+package Build_week.build_week.service;
 
 import Build_week.build_week.entities.Fattura;
 import Build_week.build_week.entities.StatoFattura;
 import Build_week.build_week.exceptions.NotFoundException;
-import Build_week.build_week.payloads.FatturaDTO;
-import Build_week.build_week.repositories.FatturaRepository;
+import Build_week.build_week.payload.FatturaDTO;
+import Build_week.build_week.repository.FatturaRepository;
+import Build_week.build_week.specification.FatturaSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,23 +47,18 @@ public class FatturaService {
         fatturaRepository.delete(f);
     }
 
-    public Page<Fattura> findByCliente(UUID clienteId, Pageable pageable) {
-        return fatturaRepository.findByClienteId(clienteId, pageable);
-    }
+    public Page<Fattura> filtraFatture(UUID clienteId, String stato, Integer anno, LocalDate data, Double min, Double max, Pageable pageable) {
+        Specification<Fattura> spec = Specification.where((root, query, cb) -> cb.conjunction());
 
-    public Page<Fattura> findByStato(String nomeStato, Pageable pageable) {
-        return fatturaRepository.findByStato_NomeIgnoreCase(nomeStato, pageable);
-    }
+        if (clienteId != null) spec = spec.and(FatturaSpecifications.hasCliente(clienteId));
+        if (stato != null) spec = spec.and(FatturaSpecifications.hasStato(stato));
+        if (anno != null) spec = spec.and(FatturaSpecifications.hasAnno(anno));
+        if (data != null) spec = spec.and(FatturaSpecifications.hasData(data));
 
-    public Page<Fattura> findByData(LocalDate data, Pageable pageable) {
-        return fatturaRepository.findByData(data, pageable);
-    }
+        if (min != null || max != null) {
+            spec = spec.and(FatturaSpecifications.hasImportoBetween(min, max));
+        }
 
-    public Page<Fattura> findByAnno(int anno, Pageable pageable) {
-        return fatturaRepository.findByAnno(anno, pageable);
-    }
-
-    public Page<Fattura> findByRangeImporto(Double min, Double max, Pageable pageable) {
-        return fatturaRepository.findByImportoBetween(min, max, pageable);
+        return fatturaRepository.findAll(spec, pageable);
     }
 }

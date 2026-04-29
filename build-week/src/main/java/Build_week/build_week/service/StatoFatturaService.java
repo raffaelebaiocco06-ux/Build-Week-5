@@ -1,8 +1,8 @@
-package Build_week.build_week.services;
+package Build_week.build_week.service;
 
 import Build_week.build_week.entities.StatoFattura;
 import Build_week.build_week.exceptions.NotFoundException;
-import Build_week.build_week.repositories.StatoFatturaRepository;
+import Build_week.build_week.repository.StatoFatturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

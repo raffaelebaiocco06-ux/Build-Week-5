@@ -1,7 +1,7 @@
 package Build_week.build_week.controllers;
 
 import Build_week.build_week.entities.StatoFattura;
-import Build_week.build_week.services.StatoFatturaService;
+import Build_week.build_week.service.StatoFatturaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
