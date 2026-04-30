@@ -16,7 +16,9 @@ function Home() {
           <Link to="/getFatture" className="btn btn-light border">
             GET FATTURE
           </Link>
-
+          <Link to="/login" className="btn btn-light border">
+            LOGIN
+          </Link>
           <Link to="/registration" className="btn btn-light border">
             REGISTRATI
           </Link>
