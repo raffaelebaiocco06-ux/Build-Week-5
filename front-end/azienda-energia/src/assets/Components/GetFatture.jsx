@@ -1,86 +1,87 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 function GetFatture() {
-  const [fatture, setFatture] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [errore, setErrore] = useState(null);
-  const [stati, setStati] = useState([]);
-  const [anno, setAnno] = useState("");
-  const [stato, setStato] = useState("");
-  const [min, setMin] = useState("");
+  const [fatture, setFatture] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [errore, setErrore] = useState(null)
+  const [stati, setStati] = useState([])
+  const [anno, setAnno] = useState("")
+  const [stato, setStato] = useState("")
+  const [min, setMin] = useState("")
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const getFatture = async (endpoint) => {
     try {
-      setLoading(true);
-      setErrore(null);
+      setLoading(true)
+      setErrore(null)
 
-      const response = await fetch(endpoint);
-      if (!response.ok) throw new Error("Errore server");
+      const response = await fetch(endpoint)
+      if (!response.ok) throw new Error("Errore server")
 
-      const data = await response.json();
+      const data = await response.json()
 
-      setFatture(data.content || data);
+      setFatture(data.content || data)
     } catch (err) {
-      setErrore(err.message);
+      setErrore(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleFiltri = () => {
-    setLoading(true);
-    setErrore(null);
+    setLoading(true)
+    setErrore(null)
 
-    let url = "http://localhost:3001/fatture/search";
-    const params = new URLSearchParams();
+    let url = "http://localhost:3001/fatture/search"
+    const params = new URLSearchParams()
 
-    if (anno) params.append("anno", anno);
-    if (stato) params.append("stato", stato);
-    if (min) params.append("min", min);
+    if (anno) params.append("anno", anno)
+    if (stato) params.append("stato", stato)
+    if (min) params.append("min", min)
 
     if ([...params].length > 0) {
-      url += `?${params.toString()}`;
+      url += `?${params.toString()}`
     }
 
-    getFatture(url);
-  };
+    getFatture(url)
+  }
 
   useEffect(() => {
-    getFatture("http://localhost:3001/fatture/search");
+    getFatture("http://localhost:3001/fatture/search")
+
     const fetchStati = async () => {
       try {
-        const response = await fetch("http://localhost:3001/stati-fattura");
-        const data = await response.json();
-        setStati(data);
+        const response = await fetch("http://localhost:3001/stati-fattura")
+        const data = await response.json()
+        setStati(data)
       } catch (err) {
-        console.error("Errore stati:", err);
+        console.error("Errore stati:", err)
       }
-    };
+    }
 
-    fetchStati();
-  }, []);
+    fetchStati()
+  }, [])
 
   const resetFiltri = async () => {
-    setAnno("");
-    setMin("");
-    setStato("");
+    setAnno("")
+    setMin("")
+    setStato("")
 
     try {
-      setLoading(true);
+      setLoading(true)
 
-      const response = await fetch("http://localhost:3001/fatture/search");
-      const data = await response.json();
+      const response = await fetch("http://localhost:3001/fatture/search")
+      const data = await response.json()
 
-      setFatture(data.content || data);
+      setFatture(data.content || data)
     } catch (err) {
-      setErrore(err.message);
+      setErrore(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="container-fluid mt-3 px-5 p-0">
@@ -88,11 +89,22 @@ function GetFatture() {
 
       <div className="row mb-3 g-2">
         <div className="col">
-          <input className="form-control" placeholder="Anno" value={anno} onChange={(e) => setAnno(e.target.value)} />
+          <input
+            className="form-control"
+            placeholder="Anno"
+            value={anno}
+            onChange={(e) => setAnno(e.target.value)}
+          />
         </div>
 
         <div className="col">
-          <input className="form-control" placeholder="Min importo" type="number" value={min} onChange={(e) => setMin(e.target.value)} />
+          <input
+            className="form-control"
+            placeholder="Min importo"
+            type="number"
+            value={min}
+            onChange={(e) => setMin(e.target.value)}
+          />
         </div>
         {console.log(stati)}
         <select onChange={(e) => setStato(e.target.value)}>
@@ -117,7 +129,10 @@ function GetFatture() {
         </div>
       </div>
 
-      <button className="btn btn-danger mb-3" onClick={() => navigate("/getClienti")}>
+      <button
+        className="btn btn-danger mb-3"
+        onClick={() => navigate("/getClienti")}
+      >
         Vai ai clienti
       </button>
 
@@ -137,7 +152,7 @@ function GetFatture() {
               <th style={{ width: "200px" }}>Importo</th>
               <th style={{ width: "200px" }}>Data</th>
               <th style={{ width: "200px" }}>Numero</th>
-              <th style={{ width: "200px" }}>Cliente</th>
+              <th style={{ width: "200px" }}>Ragione Sociale</th>
             </tr>
           </thead>
 
@@ -148,14 +163,15 @@ function GetFatture() {
                 <td>{fatture.importo}</td>
                 <td>{fatture.data}</td>
                 <td>{fatture.numero}</td>
-                <td>{fatture.cliente}</td>
+                <td>{fatture.cliente.ragioneSociale}</td>
               </tr>
             ))}
+            {console.log(fatture)}
           </tbody>
         </table>
       )}
     </div>
-  );
+  )
 }
 
-export default GetFatture;
+export default GetFatture

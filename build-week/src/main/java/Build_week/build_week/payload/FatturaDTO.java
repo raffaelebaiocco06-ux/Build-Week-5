@@ -16,6 +16,9 @@ public record FatturaDTO(
         Long numero,
 
         @NotNull(message = "L'ID dello stato è obbligatorio")
-        UUID statoId
+        UUID statoId,
+
+        @NotNull(message = "L'ID del cliente è obbligatorio")
+        UUID cliente
 ) {
 }

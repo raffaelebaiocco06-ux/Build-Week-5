@@ -1,5 +1,6 @@
 package Build_week.build_week.service;
 
+import Build_week.build_week.entities.Cliente;
 import Build_week.build_week.entities.Fattura;
 import Build_week.build_week.entities.StatoFattura;
 import Build_week.build_week.exceptions.NotFoundException;
@@ -20,17 +21,25 @@ public class FatturaService {
 
     @Autowired
     private FatturaRepository fatturaRepository;
+    @Autowired
+    private ClienteService clienteService;
 
     @Autowired
     private StatoFatturaService statoFatturaService;
 
     public Fattura save(FatturaDTO body) {
         StatoFattura stato = statoFatturaService.findById(body.statoId());
+
+        Cliente clienteTrovato = clienteService.findById(body.cliente());
+
         Fattura nuovaFattura = new Fattura();
         nuovaFattura.setData(body.data());
         nuovaFattura.setImporto(body.importo());
         nuovaFattura.setNumero(body.numero());
         nuovaFattura.setStato(stato);
+
+        nuovaFattura.setCliente(clienteTrovato);
+
         return fatturaRepository.save(nuovaFattura);
     }
 
